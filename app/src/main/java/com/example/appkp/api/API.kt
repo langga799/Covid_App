@@ -1,10 +1,7 @@
 package com.example.appkp.api
 
-import com.example.appkp.model.auth.AuthResponse
-import com.example.appkp.model.auth.LogoutResponse
-import com.example.appkp.model.auth.UserPhotoResponse
-import com.example.appkp.model.thingspeak.ThingspeakResponse
-import com.example.appkp.util.Constant
+import com.example.appkp.model.auth.*
+import com.example.appkp.model.sensors.SensorResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,7 +15,8 @@ interface API {
     fun onRegister(
         @Field("email") email: String,
         @Field("name") name: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("password_confirmation") password_confirmation: String
     ): Call<AuthResponse>
 
 
@@ -31,11 +29,11 @@ interface API {
 
 
     @FormUrlEncoded
-    @POST("api/save_user_photo")
+    @POST("api/pasien")
     fun savePhoto(
-        @Field("photo") photo: String,
+        @Field("gambar") gambar: String,
         @Header("Authorization") token: String
-    ): Call<UserPhotoResponse>
+    ): Call<UserPhotoResponse2>
 
 
     @GET("api/logout")
@@ -44,12 +42,38 @@ interface API {
     ) : Call<LogoutResponse>
 
 
+    @GET("api/find")
+    fun getUser(
+        @Header("Authorization") token: String
+    ) : Call<FindUserResponse>
+
+
+    @FormUrlEncoded
+    @POST("api/pasien")
+    fun updatePersonalInfo(
+        @Field("nama") nama: String?,
+        @Field("ttl") ttl: String?,
+        @Field("jenis_kelamin") jenisKelamin: String?,
+        @Field("alamat") alamat: String?,
+        @Field("tinggi_badan") tinggiBadan: Int?,
+        @Field("berat_badan") beratBadan: Int?,
+        @Header("Authorization") token: String
+    ) : Call<UserPhotoResponse2>
+
+
+
 
     /**
-     * Handle thingspeak request
+     * Insert Spo2 Bpm Pi
      */
-    @GET("channels/1081662/feeds.json?api_key=${Constant.API_KEY_THINGSPEAK}&results")
-    fun getThingspeakData(
-        @Query("results")result: Int
-    ): Call<ThingspeakResponse>
+
+    @FormUrlEncoded
+    @POST("api/sensor")
+    fun insertSensorData(
+        @Field("bpm") bpm: String,
+        @Field("spo2") spo2: String,
+        @Field("pi") pi: String,
+        @Header("Authorization") token: String
+    ) : Call<SensorResponse>
+
 }

@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import com.example.appkp.R
 import com.example.appkp.R.color.indikator_spo2_cukup
 import com.example.appkp.R.color.indikator_spo2_kurang
-import com.example.appkp.formatter.MyValueFormarter
+import com.example.appkp.api.RetrofitBuilder
 import com.example.appkp.formatter.MyXAxisFormatter
+import com.example.appkp.model.sensors.SensorResponse
+import com.example.appkp.util.Constant
 import com.example.appkp.util.Preferences
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -23,9 +25,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.collections.ArrayList
 
 
@@ -44,6 +46,14 @@ class HomeFragment : Fragment() {
     lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var databaseReference: DatabaseReference
 
+
+
+
+    companion object{
+        var spo2: String = ""
+        var bpm: String = ""
+        var pi: String = ""
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +83,11 @@ class HomeFragment : Fragment() {
 
         btn_pi_delete.setOnClickListener {
             databaseReference.removeValue()
+            setProgressBar(0f)
+            bpmChart.clear()
+            bpmChart.invalidate()
+            piChart.clear()
+            piChart.invalidate()
         }
     }
 
@@ -92,17 +107,21 @@ class HomeFragment : Fragment() {
         bpmFormatter()
         piChartStyle()
         piFormatter()
+
     }
 
     override fun onResume() {
         super.onResume()
-
         getFirebaseData()
+        insertDataSensor(spo2, bpm, pi)
     }
 
+    override fun onPause() {
+        super.onPause()
+        insertDataSensor(spo2, bpm, pi)
+    }
 
     private fun getFirebaseData() = CoroutineScope(Dispatchers.IO).launch {
-
 
         databaseReference.child("spo2").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
@@ -116,6 +135,8 @@ class HomeFragment : Fragment() {
                         val dataPoint = myDataSnapshot.getValue(String::class.java)
                         val filterEscapeSequence = dataPoint?.split(Regex("[\n\r]"))
                         val spo2Data = filterEscapeSequence!![0]
+                        HomeFragment.spo2 = spo2Data
+
 
                         if (spo2Data == "") {
                             setProgressBar(0f)
@@ -144,6 +165,8 @@ class HomeFragment : Fragment() {
                         val dataPoint = myDataSnapshot.getValue(String::class.java)
                         val filterEscapeSequence = dataPoint?.split(Regex("[\n\r]"))
                         val bpmData = filterEscapeSequence!![0]
+                        HomeFragment.bpm = bpmData
+
 
                         if (bpmData == "") {
                             Log.d("DataFirebase", "Data Empty")
@@ -171,11 +194,14 @@ class HomeFragment : Fragment() {
 
                 if (dataSnapshot.hasChildren()) {
 
+
                     for (myDataSnapshot in dataSnapshot.children) {
 
                         val dataPoint = myDataSnapshot.getValue(String::class.java)
                         val filterEscapeSequence = dataPoint?.split(Regex("[\n\r]"))
                         val piData = filterEscapeSequence!![0]
+                        HomeFragment.pi = piData
+
 
                         if (piData == "") {
                             Log.d("DataFirebase", "Data Empty")
@@ -191,6 +217,28 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
+
+
+    private fun insertDataSensor(spo2: String, bpm: String, pi: String) =
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val token = preference.getValue("token")
+
+           RetrofitBuilder(Constant.BASE_URL).api.insertSensorData(bpm, spo2, pi, "Bearer $token")
+               .enqueue(object : Callback<SensorResponse> {
+                   override fun onFailure(call: Call<SensorResponse>, t: Throwable) {
+
+                   }
+
+                   override fun onResponse(
+                       call: Call<SensorResponse>,
+                       response: Response<SensorResponse>
+                   ) {
+
+                   }
+               })
+        }
 
 
 

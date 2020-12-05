@@ -74,7 +74,10 @@
                         android:layout_height="70dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
-                        android:src="@drawable/alfin"
+                        android:src="@drawable/p_alfin"
+
+       
+
                         app:civ_border_color="@color/colorWhite"
                         app:civ_border_width="2dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -184,13 +187,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
+
                     android:textSize="12sp"
                     android:text="Waktu"
                     android:textColor="@color/colorBlack" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_marginTop="130dp"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/colorBlack"
@@ -229,18 +235,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+
                     android:layout_marginTop="305dp"
                     android:layout_marginStart="60dp"
                     android:textColor="@color/colorBlack"
                     android:text="Normal"/>
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_marginTop="325dp"
                     android:layout_marginStart="60dp"
                     android:textColor="@color/colorBlack"
                     android:text="Kurang"/>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -261,17 +272,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
+
+
                     android:textSize="12sp"
                     android:text="Waktu"
                     android:textColor="@color/colorBlack" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_marginTop="130dp"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/colorBlack"
                     android:text="%"/>
+
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart_PI"
@@ -284,10 +300,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+
                     android:layout_marginTop="280dp"
                     android:layout_marginStart="40dp"
                     android:textColor="@color/colorBlack"
                     android:text="Keterangan : "/>
+
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="10dp"
@@ -306,18 +325,24 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+
                     android:layout_marginTop="305dp"
                     android:layout_marginStart="60dp"
                     android:textColor="@color/colorBlack"
                     android:text="Normal"/>
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+
                     android:layout_marginTop="325dp"
                     android:layout_marginStart="60dp"
                     android:textColor="@color/colorBlack"
                     android:text="Kurang"/>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -341,6 +366,16 @@
                     android:text="delete" />
 
             </LinearLayout>
+
+            <TextView
+                android:text="@string/copyright"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
